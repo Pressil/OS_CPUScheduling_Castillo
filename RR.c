@@ -63,8 +63,13 @@ int main() {
     for (i = 0; i < k; i++) printf("-------");
     printf("\n");
 
+    // Fixed Timeline
     printf("0");
-    for (i = 0; i < k; i++) printf("%7d", finish[i]);
+    for (i = 0; i < k; i++) {
+        if (i == 0 || finish[i] != finish[i-1]) {
+            printf("%7d", finish[i]);
+        }
+    }
     printf("\n");
 
     // Process Table
