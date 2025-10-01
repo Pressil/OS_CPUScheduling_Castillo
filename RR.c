@@ -24,11 +24,10 @@ int main() {
     float avgTAT = 0, avgWT = 0;
 
     printf("\nGantt Chart (Round Robin):\n ");
-
     for (i = 0; i < 40; i++) printf("-"); 
     printf("\n|");
 
-    int timeline[200]; // stores the times for labels
+    int timeline[200];   // stores the time labels
     int timeline_idx = 0;
     timeline[timeline_idx++] = 0;
 
@@ -38,6 +37,7 @@ int main() {
             if (p[i].rt > 0 && p[i].at <= time) {
                 doneSomething = 1;
 
+                // Print slot in Gantt chart
                 printf(" P%d |", p[i].pid);
 
                 if (p[i].rt > tq) {
@@ -53,12 +53,15 @@ int main() {
                     avgWT += p[i].wt;
                     completed++;
                 }
-                timeline[timeline_idx++] = time; // only update after a bar
+
+                // Record time after this slot
+                timeline[timeline_idx++] = time;
             }
         }
 
         if (!doneSomething) {
-            time++; 
+            time++; // idle time handling
+            timeline[timeline_idx++] = time;
         }
     }
 
@@ -66,12 +69,13 @@ int main() {
     for (i = 0; i < 40; i++) printf("-");
     printf("\n");
 
-    // Print timeline aligned
+    // Print timeline aligned with Gantt Chart
     for (i = 0; i < timeline_idx; i++) {
         printf("%-5d", timeline[i]);
     }
     printf("\n");
 
+    // Process Table
     printf("\nProcess Table:\n");
     printf("PID\tAT\tBT\tCT\tTAT\tWT\n");
     for (i = 0; i < n; i++) {
