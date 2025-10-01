@@ -40,14 +40,12 @@ int main() {
         printf("  P%d  |", p[i].pid);
     }
 
-    // Bottom bar
     printf("\n ");
     for (i = 0; i < n; i++) {
         printf("-------");
     }
     printf("\n");
 
-    // Timeline
     time = 0;
     printf("0");
     for (i = 0; i < n; i++) {
@@ -57,7 +55,6 @@ int main() {
     }
     printf("\n");
 
-    // Table
     printf("\nProcess Table:\n");
     printf("PID\tAT\tBT\tCT\tTAT\tWT\n");
     for (i = 0; i < n; i++) {
