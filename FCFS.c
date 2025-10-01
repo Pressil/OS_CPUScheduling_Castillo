@@ -20,14 +20,15 @@ int main() {
     int time = 0;
     float avgTAT = 0, avgWT = 0;
 
-    printf("\nGantt Chart (FCFS):\n");
+    printf("\nGantt Chart (FCFS):\n ");
 
-    printf(" ");
+    // Top bar
     for (i = 0; i < n; i++) {
-        printf("------");
+        printf("-------");
     }
-    printf("-\n|");
+    printf("\n|");
 
+    // Process order
     for (i = 0; i < n; i++) {
         if (time < p[i].at) time = p[i].at;
         time += p[i].bt;
@@ -36,21 +37,27 @@ int main() {
         p[i].wt = p[i].tat - p[i].bt;
         avgTAT += p[i].tat;
         avgWT += p[i].wt;
-        printf(" P%d  |", p[i].pid);
+        printf("  P%d  |", p[i].pid);
     }
 
+    // Bottom bar
     printf("\n ");
     for (i = 0; i < n; i++) {
-        printf("------");
-    }
-    printf("-\n");
-
-    printf("0"); 
-    for (i = 0; i < n; i++) {
-        printf("%6d", p[i].ct);
+        printf("-------");
     }
     printf("\n");
 
+    // Timeline
+    time = 0;
+    printf("0");
+    for (i = 0; i < n; i++) {
+        if (time < p[i].at) time = p[i].at;
+        time += p[i].bt;
+        printf("%7d", time);
+    }
+    printf("\n");
+
+    // Table
     printf("\nProcess Table:\n");
     printf("PID\tAT\tBT\tCT\tTAT\tWT\n");
     for (i = 0; i < n; i++) {

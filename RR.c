@@ -23,9 +23,10 @@ int main() {
 
     float avgTAT = 0, avgWT = 0;
 
-    printf("\nGantt Chart (Round Robin):\n ");
+    printf("\nGantt Chart (Round Robin):\n");
 
-    for (i = 0; i < 50; i++) printf("-"); 
+    printf(" ");
+    for (i = 0; i < n * 6; i++) printf("-");
     printf("\n|");
 
     while (completed < n) {
@@ -38,6 +39,7 @@ int main() {
                     printf(" P%d |", p[i].pid);
                     time += tq;
                     p[i].rt -= tq;
+                    printf("%d", time); // print after slice
                 } else {
                     printf(" P%d |", p[i].pid);
                     time += p[i].rt;
@@ -48,27 +50,18 @@ int main() {
                     avgTAT += p[i].tat;
                     avgWT += p[i].wt;
                     completed++;
+                    printf("%d", time); // print final CT
                 }
             }
         }
 
         if (!doneSomething) {
-            time++; 
+            time++;
         }
     }
 
     printf("\n ");
-    for (i = 0; i < 50; i++) printf("-");
-    printf("\n");
-
-    printf("0");
-    int lastCT = 0;
-    for (i = 0; i < n; i++) {
-        if (p[i].ct > lastCT) {
-            printf("%6d", p[i].ct);
-            lastCT = p[i].ct;
-        }
-    }
+    for (i = 0; i < n * 6; i++) printf("-");
     printf("\n");
 
     printf("\nProcess Table:\n");

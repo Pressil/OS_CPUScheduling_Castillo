@@ -5,7 +5,7 @@ struct Process {
 };
 
 int main() {
-    int n, i, j;
+    int n, i;
     printf("Enter number of processes: ");
     scanf("%d", &n);
 
@@ -21,13 +21,10 @@ int main() {
     int time = 0, completed = 0;
     float avgTAT = 0, avgWT = 0;
 
-    printf("\nGantt Chart (SJF Non-Preemptive):\n");
+    // For storing Gantt chart sequence
+    int order[n], finish[n], k = 0;
 
-    printf(" ");
-    for (i = 0; i < n; i++) {
-        printf("------");
-    }
-    printf("-\n|");
+    printf("\nGantt Chart (SJF Non-Preemptive):\n ");
 
     while (completed < n) {
         int idx = -1;
@@ -45,31 +42,50 @@ int main() {
             continue;
         }
 
+        // Execute chosen process
         time += p[idx].bt;
         p[idx].ct = time;
         p[idx].tat = p[idx].ct - p[idx].at;
         p[idx].wt = p[idx].tat - p[idx].bt;
         p[idx].completed = 1;
-        completed++;
 
         avgTAT += p[idx].tat;
         avgWT += p[idx].wt;
 
-        printf(" P%d  |", p[idx].pid);
+        // Store order + completion for Gantt chart
+        order[k] = p[idx].pid;
+        finish[k] = p[idx].ct;
+        k++;
+
+        completed++;
     }
 
+    // Print top bar
+    for (i = 0; i < k; i++) {
+        printf("-------");
+    }
+    printf("\n|");
+
+    // Print process order
+    for (i = 0; i < k; i++) {
+        printf("  P%d  |", order[i]);
+    }
+
+    // Bottom bar
     printf("\n ");
-    for (i = 0; i < n; i++) {
-        printf("------");
-    }
-    printf("-\n");
-
-    printf("0");
-    for (i = 0; i < n; i++) {
-        printf("%6d", p[i].ct);
+    for (i = 0; i < k; i++) {
+        printf("-------");
     }
     printf("\n");
 
+    // Timeline
+    printf("0");
+    for (i = 0; i < k; i++) {
+        printf("%7d", finish[i]);
+    }
+    printf("\n");
+
+    // Process Table
     printf("\nProcess Table:\n");
     printf("PID\tAT\tBT\tCT\tTAT\tWT\n");
     for (i = 0; i < n; i++) {
