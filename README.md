@@ -1,5 +1,9 @@
 # CPU Scheduling Algorithms in C
 
+This repository contains implementations of classic CPU scheduling algorithms: **First-Come, First-Served (FCFS)**, **Shortest Job First (SJF, Non-Preemptive)**, and **Round Robin (RR)**. Below you'll find explanations, sample input/output screenshots, and visualized Gantt charts from actual program runs.
+
+---
+
 ### 1. First-Come, First-Served (FCFS)
 
 **What it does:**  
