@@ -14,7 +14,7 @@ int main() {
         p[i].pid = i + 1;
         printf("Enter AT and BT for P%d: ", p[i].pid);
         scanf("%d %d", &p[i].at, &p[i].bt);
-        p[i].rt = p[i].bt; // remaining time
+        p[i].rt = p[i].bt; 
     }
 
     printf("Enter Time Quantum: ");
@@ -23,7 +23,6 @@ int main() {
     int time = 0, completed = 0;
     float avgTAT = 0, avgWT = 0;
 
-    // Gantt chart storage
     int order[200], finish[200], k = 0;
 
     while (completed < n) {
@@ -32,7 +31,6 @@ int main() {
             if (p[i].rt > 0 && p[i].at <= time) {
                 doneSomething = 1;
 
-                // record execution order
                 order[k] = p[i].pid;
 
                 if (p[i].rt > tq) {
@@ -55,7 +53,6 @@ int main() {
         if (!doneSomething) time++;
     }
 
-    // Print Gantt Chart
     for (i = 0; i < k; i++) printf("-------");
     printf("\n|");
     for (i = 0; i < k; i++) printf("  P%d  |", order[i]);
@@ -63,7 +60,6 @@ int main() {
     for (i = 0; i < k; i++) printf("-------");
     printf("\n");
 
-    // Fixed Timeline
     printf("0");
     for (i = 0; i < k; i++) {
         if (i == 0 || finish[i] != finish[i-1]) {
@@ -72,7 +68,6 @@ int main() {
     }
     printf("\n");
 
-    // Process Table
     printf("\nProcess Table:\n");
     printf("PID\tAT\tBT\tCT\tTAT\tWT\n");
     for (i = 0; i < n; i++) {
