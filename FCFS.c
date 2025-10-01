@@ -22,14 +22,12 @@ int main() {
 
     printf("\nGantt Chart (FCFS):\n");
 
-    // Print top border
     printf(" ");
     for (i = 0; i < n; i++) {
         printf("------");
     }
     printf("-\n|");
 
-    // Print process IDs while calculating times
     for (i = 0; i < n; i++) {
         if (time < p[i].at) time = p[i].at;
         time += p[i].bt;
@@ -41,21 +39,18 @@ int main() {
         printf(" P%d  |", p[i].pid);
     }
 
-    // Print bottom border
     printf("\n ");
     for (i = 0; i < n; i++) {
         printf("------");
     }
     printf("-\n");
 
-    // ✅ Print timeline correctly
-    printf("0"); // Start always at 0
+    printf("0"); 
     for (i = 0; i < n; i++) {
         printf("%6d", p[i].ct);
     }
     printf("\n");
 
-    // Process Table
     printf("\nProcess Table:\n");
     printf("PID\tAT\tBT\tCT\tTAT\tWT\n");
     for (i = 0; i < n; i++) {
