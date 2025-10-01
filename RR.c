@@ -1,44 +1,20 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 struct Process {
     int pid, at, bt, ct, tat, wt, rt;
 };
 
-struct Queue {
-    int items[100];
-    int front, rear;
-};
-
-void initQueue(struct Queue *q) {
-    q->front = 0;
-    q->rear = 0;
-}
-
-int isEmpty(struct Queue *q) {
-    return q->front == q->rear;
-}
-
-void enqueue(struct Queue *q, int value) {
-    q->items[q->rear++] = value;
-}
-
-int dequeue(struct Queue *q) {
-    if (isEmpty(q)) return -1;
-    return q->items[q->front++];
-}
-
 int main() {
-    int n, tq;
+    int n, tq, i;
     printf("Enter number of processes: ");
     scanf("%d", &n);
 
     struct Process p[n];
-    for (int i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) {
         p[i].pid = i + 1;
         printf("Enter AT and BT for P%d: ", p[i].pid);
         scanf("%d %d", &p[i].at, &p[i].bt);
-        p[i].rt = p[i].bt;  // remaining time
+        p[i].rt = p[i].bt; // remaining time
     }
 
     printf("Enter Time Quantum: ");
@@ -47,87 +23,56 @@ int main() {
     int time = 0, completed = 0;
     float avgTAT = 0, avgWT = 0;
 
-    int timeline[200]; 
-    int gantt[200];
-    int idx = 0;
-
-    struct Queue q;
-    initQueue(&q);
-
-    // First arrivals
-    int added[100] = {0}; 
-    for (int i = 0; i < n; i++) {
-        if (p[i].at == 0) {
-            enqueue(&q, i);
-            added[i] = 1;
-        }
-    }
-
-    timeline[idx] = 0;
-
-    printf("\nGantt Chart (Round Robin):\n ");
-    for (int i = 0; i < 40; i++) printf("-");
-    printf("\n|");
+    // Gantt chart storage
+    int order[200], finish[200], k = 0;
 
     while (completed < n) {
-        if (isEmpty(&q)) {
-            time++;
-            for (int i = 0; i < n; i++) {
-                if (!added[i] && p[i].at <= time) {
-                    enqueue(&q, i);
-                    added[i] = 1;
+        int doneSomething = 0;
+        for (i = 0; i < n; i++) {
+            if (p[i].rt > 0 && p[i].at <= time) {
+                doneSomething = 1;
+
+                // record execution order
+                order[k] = p[i].pid;
+
+                if (p[i].rt > tq) {
+                    time += tq;
+                    p[i].rt -= tq;
+                } else {
+                    time += p[i].rt;
+                    p[i].rt = 0;
+                    p[i].ct = time;
+                    p[i].tat = p[i].ct - p[i].at;
+                    p[i].wt = p[i].tat - p[i].bt;
+                    avgTAT += p[i].tat;
+                    avgWT += p[i].wt;
+                    completed++;
                 }
-            }
-            continue;
-        }
-
-        int i = dequeue(&q);
-
-        printf(" P%d |", p[i].pid);
-
-        int execTime = (p[i].rt > tq) ? tq : p[i].rt;
-        time += execTime;
-        p[i].rt -= execTime;
-
-        // check new arrivals during execution
-        for (int j = 0; j < n; j++) {
-            if (!added[j] && p[j].at <= time) {
-                enqueue(&q, j);
-                added[j] = 1;
+                finish[k] = time;
+                k++;
             }
         }
-
-        if (p[i].rt > 0) {
-            enqueue(&q, i); // not finished, put back
-        } else {
-            p[i].ct = time;
-            p[i].tat = p[i].ct - p[i].at;
-            p[i].wt = p[i].tat - p[i].bt;
-            avgTAT += p[i].tat;
-            avgWT += p[i].wt;
-            completed++;
-        }
-
-        timeline[++idx] = time;
-        gantt[idx-1] = p[i].pid;
+        if (!doneSomething) time++;
     }
 
-    printf("\n ");
-    for (int i = 0; i < 40; i++) printf("-");
+    // Print Gantt Chart
+    for (i = 0; i < k; i++) printf("-------");
+    printf("\n|");
+    for (i = 0; i < k; i++) printf("  P%d  |", order[i]);
+    printf("\n");
+    for (i = 0; i < k; i++) printf("-------");
     printf("\n");
 
-    // Print timeline
-    for (int i = 0; i <= idx; i++) {
-        printf("%-5d", timeline[i]);
-    }
+    printf("0");
+    for (i = 0; i < k; i++) printf("%7d", finish[i]);
     printf("\n");
 
     // Process Table
     printf("\nProcess Table:\n");
     printf("PID\tAT\tBT\tCT\tTAT\tWT\n");
-    for (int i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) {
         printf("%d\t%d\t%d\t%d\t%d\t%d\n",
-               p[i].pid, p[i].at, p[i].bt, p[i].ct, p[i].tat, p[i].wt);
+            p[i].pid, p[i].at, p[i].bt, p[i].ct, p[i].tat, p[i].wt);
     }
 
     printf("\nAverage TAT = %.2f", avgTAT / n);
