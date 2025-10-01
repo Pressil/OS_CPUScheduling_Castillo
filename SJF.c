@@ -21,7 +21,6 @@ int main() {
     int time = 0, completed = 0;
     float avgTAT = 0, avgWT = 0;
 
-    // For storing Gantt chart sequence
     int order[n], finish[n], k = 0;
 
     printf("\nGantt Chart (SJF Non-Preemptive):\n ");
@@ -42,7 +41,6 @@ int main() {
             continue;
         }
 
-        // Execute chosen process
         time += p[idx].bt;
         p[idx].ct = time;
         p[idx].tat = p[idx].ct - p[idx].at;
@@ -52,7 +50,6 @@ int main() {
         avgTAT += p[idx].tat;
         avgWT += p[idx].wt;
 
-        // Store order + completion for Gantt chart
         order[k] = p[idx].pid;
         finish[k] = p[idx].ct;
         k++;
@@ -60,32 +57,27 @@ int main() {
         completed++;
     }
 
-    // Print top bar
     for (i = 0; i < k; i++) {
         printf("-------");
     }
     printf("\n|");
 
-    // Print process order
     for (i = 0; i < k; i++) {
         printf("  P%d  |", order[i]);
     }
 
-    // Bottom bar
     printf("\n ");
     for (i = 0; i < k; i++) {
         printf("-------");
     }
     printf("\n");
 
-    // Timeline
     printf("0");
     for (i = 0; i < k; i++) {
         printf("%7d", finish[i]);
     }
     printf("\n");
 
-    // Process Table
     printf("\nProcess Table:\n");
     printf("PID\tAT\tBT\tCT\tTAT\tWT\n");
     for (i = 0; i < n; i++) {
