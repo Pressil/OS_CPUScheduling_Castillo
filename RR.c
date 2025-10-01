@@ -23,11 +23,14 @@ int main() {
 
     float avgTAT = 0, avgWT = 0;
 
-    printf("\nGantt Chart (Round Robin):\n");
+    printf("\nGantt Chart (Round Robin):\n ");
 
-    printf(" ");
-    for (i = 0; i < n * 6; i++) printf("-");
+    for (i = 0; i < 40; i++) printf("-"); 
     printf("\n|");
+
+    int timeline[200]; // stores the times for labels
+    int timeline_idx = 0;
+    timeline[timeline_idx++] = 0;
 
     while (completed < n) {
         int doneSomething = 0;
@@ -35,13 +38,12 @@ int main() {
             if (p[i].rt > 0 && p[i].at <= time) {
                 doneSomething = 1;
 
+                printf(" P%d |", p[i].pid);
+
                 if (p[i].rt > tq) {
-                    printf(" P%d |", p[i].pid);
                     time += tq;
                     p[i].rt -= tq;
-                    printf("%d", time); // print after slice
                 } else {
-                    printf(" P%d |", p[i].pid);
                     time += p[i].rt;
                     p[i].rt = 0;
                     p[i].ct = time;
@@ -50,18 +52,24 @@ int main() {
                     avgTAT += p[i].tat;
                     avgWT += p[i].wt;
                     completed++;
-                    printf("%d", time); // print final CT
                 }
+                timeline[timeline_idx++] = time; // only update after a bar
             }
         }
 
         if (!doneSomething) {
-            time++;
+            time++; 
         }
     }
 
     printf("\n ");
-    for (i = 0; i < n * 6; i++) printf("-");
+    for (i = 0; i < 40; i++) printf("-");
+    printf("\n");
+
+    // Print timeline aligned
+    for (i = 0; i < timeline_idx; i++) {
+        printf("%-5d", timeline[i]);
+    }
     printf("\n");
 
     printf("\nProcess Table:\n");
